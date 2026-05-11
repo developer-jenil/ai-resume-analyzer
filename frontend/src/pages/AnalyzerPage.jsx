@@ -17,6 +17,8 @@ function AnalyzerPage() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [resumeId, setResumeId] = useState("");
   const [resumePreview, setResumePreview] = useState("");
+  const [resumeText, setResumeText] = useState("");
+  const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
   const [jobDescription, setJobDescription] = useState("");
   const [selectedPreset, setSelectedPreset] = useState("");
   const [result, setResult] = useState(null);
@@ -42,8 +44,8 @@ function AnalyzerPage() {
   };
 
   const canAnalyze = useMemo(
-    () => Boolean(resumeId && jobDescription && jobDescription.trim().length > 20),
-    [resumeId, jobDescription]
+    () => Boolean((resumeId || resumeText) && jobDescription && jobDescription.trim().length > 20),
+    [resumeId, resumeText, jobDescription]
   );
 
   const handleFileSelected = async (file) => {
@@ -56,6 +58,7 @@ function AnalyzerPage() {
       const uploadData = await uploadResume(file, setUploadProgress);
       setResumeId(uploadData.resumeId);
       setResumePreview(uploadData.preview);
+      setResumeText(uploadData.extractedText || "");
       setFeedback({ type: "success", message: "Resume uploaded and parsed successfully." });
     } catch (error) {
       const message =
@@ -71,10 +74,14 @@ function AnalyzerPage() {
     try {
       const data = await analyzeResume({
         resumeId,
+        resumeText,
         jobDescription,
       });
       setResult(data);
       setFeedback({ type: "success", message: "Analysis completed successfully." });
+      setHistoryRefreshKey((k) => k + 1);
+      // scroll report into view
+      setTimeout(() => reportRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
     } catch (error) {
       const message = error?.response?.data?.detail || "Analysis failed. Please try again.";
       setFeedback({ type: "error", message });

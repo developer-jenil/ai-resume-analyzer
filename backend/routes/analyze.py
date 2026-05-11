@@ -4,9 +4,13 @@ from typing import Dict, List
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
 
-from schemas.request_response import AnalyzeRequest, AnalyzeResponse, UploadResponse
-from services.analyzer import analyze_resume_and_jd
-from utils.pdf_parser import extract_text_from_pdf
+from backend.schemas.request_response import (
+    AnalyzeRequest,
+    AnalyzeResponse,
+    UploadResponse,
+)
+from backend.services.analyzer import analyze_resume_and_jd
+from backend.utils.pdf_parser import extract_text_from_pdf
 
 router = APIRouter(tags=["analyzer"])
 

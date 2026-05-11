@@ -3,8 +3,8 @@ from typing import List, Set
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-from schemas.request_response import AnalyzeResponse
-from utils.text_processing import clean_text, extract_keywords, extract_skills
+from backend.schemas.request_response import AnalyzeResponse
+from backend.utils.text_processing import clean_text, extract_keywords, extract_skills
 
 
 def _to_set(items: List[str]) -> Set[str]:

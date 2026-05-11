@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { fadeUpItem } from "../animations/pageVariants";
 import { getResults } from "../services/api";
 
-function HistoryPanel() {
+function HistoryPanel({ refreshKey }) {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -20,7 +20,7 @@ function HistoryPanel() {
     };
     
     fetchHistory();
-  }, []);
+  }, [refreshKey]);
 
   if (loading) return null;
   if (history.length === 0) return null;
